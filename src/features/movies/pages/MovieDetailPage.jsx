@@ -296,7 +296,7 @@ export default function MovieDetailPage() {
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 px-4 md:px-12 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Top Billed Cast
           </h2>
-          <div className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth px-4 md:px-12 py-2">
+          <div className="flex gap-4 overflow-x-auto scroll-smooth px-4 md:px-12 py-2 pb-4">
             {cast.map((member) => (
               <ActorCard key={member.id} actor={member} />
             ))}

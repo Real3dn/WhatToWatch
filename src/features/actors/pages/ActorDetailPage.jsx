@@ -117,7 +117,7 @@ export default function ActorDetailPage() {
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Known For (Filmography)
           </h2>
-          <div className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2">
+          <div className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4">
             {filmography.map((item) => (
               <MovieCard key={`${item.id}-${item.media_type}`} item={item} typeOverride={item.media_type} />
             ))}
@@ -131,7 +131,7 @@ export default function ActorDetailPage() {
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Photos ({photos.length})
           </h2>
-          <div className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2">
+          <div className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4">
             {photos.map((img, index) => (
               <div key={index} className="w-32 sm:w-40 shrink-0 aspect-[2/3] bg-zinc-800 rounded-lg overflow-hidden border border-zinc-850">
                 <img

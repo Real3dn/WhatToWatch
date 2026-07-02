@@ -1,16 +1,42 @@
-# React + Vite
+# What To Watch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium Netflix-inspired Movie Discovery web application built with React, Vite, Tailwind CSS, and TanStack Query. Designed for portfolio demonstration.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Dynamic Homepage**: High-impact hero banner, trailer video modal overlay, and scrolling category carousels.
+- **Advanced Search**: Live search with category breakdown (Movies, TV Shows, People) and persistent search history.
+- **Discovery Engine**: Custom genre toggles with infinite scroll pagination, language filters, release year, and ratings thresholds.
+- **Zustand State Store**: Synchronized and persisted Watchlist and Favorites items in LocalStorage.
+- **Deep Integrations**: Actor biographies, complete TV/Movie details, interactive carousels, and external public rating systems (IMDb, Rotten Tomatoes, Letterboxd).
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework**: React 19 + Vite
+- **Routing**: React Router v7
+- **Styling**: Tailwind CSS v4
+- **State Management**: Zustand
+- **Data Fetching**: Axios + TanStack Query (React Query)
+- **Quality Tools**: ESLint + Prettier
 
-## Expanding the ESLint configuration
+## Quick Start
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Create a `.env.local` file with your TMDB API Key:
+   ```env
+   VITE_TMDB_API_KEY=your_api_key_here
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
