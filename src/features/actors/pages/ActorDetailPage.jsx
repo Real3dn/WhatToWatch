@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { tmdbService } from '../../../services/tmdbService';
@@ -21,6 +21,65 @@ export default function ActorDetailPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id]);
+
+  // Scrolling carousel refs & states
+  const filmographyRef = useRef(null);
+  const photosRef = useRef(null);
+
+  const [showFilmoLeft, setShowFilmoLeft] = useState(false);
+  const [showFilmoRight, setShowFilmoRight] = useState(true);
+
+  const [showPhotosLeft, setShowPhotosLeft] = useState(false);
+  const [showPhotosRight, setShowPhotosRight] = useState(true);
+
+  const checkFilmoScroll = () => {
+    if (filmographyRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = filmographyRef.current;
+      setShowFilmoLeft(scrollLeft > 10);
+      setShowFilmoRight(scrollLeft + clientWidth < scrollWidth - 10);
+    }
+  };
+
+  const checkPhotosScroll = () => {
+    if (photosRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = photosRef.current;
+      setShowPhotosLeft(scrollLeft > 10);
+      setShowPhotosRight(scrollLeft + clientWidth < scrollWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    const filmoEl = filmographyRef.current;
+    if (filmoEl) {
+      filmoEl.addEventListener('scroll', checkFilmoScroll, { passive: true });
+      checkFilmoScroll();
+    }
+    const photosEl = photosRef.current;
+    if (photosEl) {
+      photosEl.addEventListener('scroll', checkPhotosScroll, { passive: true });
+      checkPhotosScroll();
+    }
+
+    const handleResize = () => {
+      checkFilmoScroll();
+      checkPhotosScroll();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      if (filmoEl) filmoEl.removeEventListener('scroll', checkFilmoScroll);
+      if (photosEl) photosEl.removeEventListener('scroll', checkPhotosScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [actor, isLoading]);
+
+  const scrollContainer = (ref, direction) => {
+    if (ref.current) {
+      const { clientWidth } = ref.current;
+      const scrollAmount = direction === 'left' ? -clientWidth * 0.8 : clientWidth * 0.8;
+      ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -113,11 +172,41 @@ export default function ActorDetailPage() {
 
       {/* Filmography Section */}
       {filmography.length > 0 && (
-        <div className="mt-12 select-none relative">
+        <div className="mt-12 select-none relative group/carousel">
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Known For (Filmography)
           </h2>
-          <div className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4">
+
+          {/* Scroll Left Button */}
+          {showFilmoLeft && (
+            <button
+              onClick={() => scrollContainer(filmographyRef, 'left')}
+              className="absolute left-0 top-[48px] bottom-[16px] z-10 w-10 md:w-12 bg-black/75 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 rounded-r-md border-r border-y border-zinc-800/40 cursor-pointer shadow-lg"
+              aria-label="Scroll Left"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Scroll Right Button */}
+          {showFilmoRight && (
+            <button
+              onClick={() => scrollContainer(filmographyRef, 'right')}
+              className="absolute right-0 top-[48px] bottom-[16px] z-10 w-10 md:w-12 bg-black/75 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 rounded-l-md border-l border-y border-zinc-800/40 cursor-pointer shadow-lg"
+              aria-label="Scroll Right"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+
+          <div
+            ref={filmographyRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4"
+          >
             {filmography.map((item) => (
               <MovieCard key={`${item.id}-${item.media_type}`} item={item} typeOverride={item.media_type} />
             ))}
@@ -127,11 +216,41 @@ export default function ActorDetailPage() {
 
       {/* Photos Carousel Section */}
       {photos.length > 0 && (
-        <div className="mt-12 select-none relative">
+        <div className="mt-12 select-none relative group/carousel">
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Photos ({photos.length})
           </h2>
-          <div className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4">
+
+          {/* Scroll Left Button */}
+          {showPhotosLeft && (
+            <button
+              onClick={() => scrollContainer(photosRef, 'left')}
+              className="absolute left-0 top-[48px] bottom-[16px] z-10 w-10 md:w-12 bg-black/75 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 rounded-r-md border-r border-y border-zinc-800/40 cursor-pointer shadow-lg"
+              aria-label="Scroll Left"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Scroll Right Button */}
+          {showPhotosRight && (
+            <button
+              onClick={() => scrollContainer(photosRef, 'right')}
+              className="absolute right-0 top-[48px] bottom-[16px] z-10 w-10 md:w-12 bg-black/75 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 rounded-l-md border-l border-y border-zinc-800/40 cursor-pointer shadow-lg"
+              aria-label="Scroll Right"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+
+          <div
+            ref={photosRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth py-2 pb-4"
+          >
             {photos.map((img, index) => (
               <div key={index} className="w-32 sm:w-40 shrink-0 aspect-[2/3] bg-zinc-800 rounded-lg overflow-hidden border border-zinc-850">
                 <img
