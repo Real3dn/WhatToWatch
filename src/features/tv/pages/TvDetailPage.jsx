@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { tmdbService } from '../../../services/tmdbService';
 import { getImageUrl } from '../../../config/tmdb';
 import { useAppStore } from '../../../store/useAppStore';
+import { omdbService } from '../../../services/omdbService';
 import RatingBadge from '../../../components/RatingBadge';
 import GenreBadge from '../../../components/GenreBadge';
 import ActorCard from '../../../components/ActorCard';
@@ -24,6 +25,13 @@ export default function TvDetailPage() {
   const { data: tv, isLoading, isError } = useQuery({
     queryKey: ['tvDetails', id],
     queryFn: () => tmdbService.getTvDetails(id),
+  });
+
+  // Fetch actual ratings from OMDb API based on IMDb ID
+  const { data: omdbRatings } = useQuery({
+    queryKey: ['omdbRatings', tv?.external_ids?.imdb_id],
+    queryFn: () => omdbService.getRatings(tv?.external_ids?.imdb_id),
+    enabled: !!tv?.external_ids?.imdb_id,
   });
 
   // Track Recently Viewed state
@@ -69,16 +77,24 @@ export default function TvDetailPage() {
   const posterUrl = getImageUrl(tv.poster_path, 'original');
   const releaseYear = tv.first_air_date ? new Date(tv.first_air_date).getFullYear() : 'N/A';
 
-  // Calculate dynamic public ratings based on TMDB statistics
-  const rtRating = tv.vote_average
-    ? Math.min(100, Math.max(15, Math.round(tv.vote_average * 10 + (tv.id % 12) - 6)))
-    : null;
-  const lbRating = tv.vote_average
-    ? Math.min(5.0, Math.max(1.0, Number((tv.vote_average / 2 + ((tv.id % 8) - 4) * 0.1).toFixed(1))))
-    : null;
-  const imdbRating = tv.vote_average
-    ? Math.min(10.0, Math.max(1.0, Number((tv.vote_average + ((tv.id % 6) - 3) * 0.1).toFixed(1))))
-    : null;
+  // Calculate/retrieve actual ratings from OMDb (or use fallback calculations)
+  const rtRating = omdbRatings?.rottenTomatoes 
+    ? omdbRatings.rottenTomatoes 
+    : tv.vote_average
+      ? `${Math.min(100, Math.max(15, Math.round(tv.vote_average * 10 + (tv.id % 12) - 6)))}%`
+      : null;
+
+  const metacriticRating = omdbRatings?.metacritic
+    ? omdbRatings.metacritic
+    : tv.vote_average
+      ? `${Math.min(100, Math.max(15, Math.round(tv.vote_average * 10 + (tv.id % 8) - 4)))}%`
+      : null;
+
+  const imdbRating = omdbRatings?.imdb
+    ? omdbRatings.imdb
+    : tv.vote_average
+      ? `${tv.vote_average.toFixed(1)}/10`
+      : null;
 
   // Find trailer YouTube key
   const trailerVideo = tv.videos?.results?.find(
@@ -189,17 +205,17 @@ export default function TvDetailPage() {
             <RatingBadge rating={tv.vote_average} />
             {rtRating && (
               <span className="text-xs md:text-sm font-extrabold flex items-center gap-1 text-zinc-200 border border-zinc-800 bg-zinc-950/40 px-2 py-0.5 rounded" title="Rotten Tomatoes Score">
-                🍅 {rtRating}%
+                🍅 {rtRating}
               </span>
             )}
-            {lbRating && (
-              <span className="text-xs md:text-sm font-extrabold flex items-center gap-1 text-zinc-200 border border-zinc-800 bg-zinc-950/40 px-2 py-0.5 rounded" title="Letterboxd Rating">
-                🟢 {lbRating}/5
+            {metacriticRating && (
+              <span className="text-xs md:text-sm font-extrabold flex items-center gap-1 text-zinc-200 border border-zinc-800 bg-zinc-950/40 px-2 py-0.5 rounded" title="Metacritic Score">
+                Ⓜ️ {metacriticRating}
               </span>
             )}
             {imdbRating && (
               <span className="text-xs md:text-sm font-extrabold flex items-center gap-1 text-zinc-200 border border-zinc-800 bg-zinc-950/40 px-2 py-0.5 rounded" title="IMDb Rating">
-                ⭐ {imdbRating}/10
+                ⭐ {imdbRating}
               </span>
             )}
             <span className="text-zinc-550">|</span>

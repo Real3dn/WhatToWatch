@@ -55,7 +55,7 @@ export const tmdbService = {
   getTvDetails: async (id) => {
     const { data } = await tmdbClient.get(`/tv/${id}`, {
       params: {
-        append_to_response: 'videos,credits,reviews,recommendations,similar,images',
+        append_to_response: 'videos,credits,reviews,recommendations,similar,images,external_ids',
       },
     });
     return data;
