@@ -141,7 +141,7 @@ export default function TvDetailPage() {
   const reviews = tv.reviews?.results?.slice(0, 3) || [];
 
   return (
-    <div className="relative overflow-hidden bg-neutral-900 pb-16 -mt-20 select-none">
+    <div className="relative overflow-hidden bg-neutral-900 pb-16 -mt-20">
       {/* Backdrop Image Banner */}
       <div className="absolute top-0 left-0 right-0 h-[50vh] md:h-[65vh] z-0">
         {backdropUrl ? (

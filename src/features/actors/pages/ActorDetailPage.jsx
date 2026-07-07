@@ -116,7 +116,7 @@ export default function ActorDetailPage() {
     : null;
 
   return (
-    <div className="container mx-auto px-4 md:px-12 py-8 select-none">
+    <div className="container mx-auto px-4 md:px-12 py-8">
       {/* Top Bio Section */}
       <div className="flex flex-col md:flex-row gap-8 items-start">
         {/* Profile Photo */}
