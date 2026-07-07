@@ -84,7 +84,7 @@ export default function MovieCard({ item, typeOverride }) {
     <Link
       to={detailPath}
       onClick={handleCardClick}
-      className="group relative flex flex-col gap-2 shrink-0 w-36 sm:w-44 md:w-52 select-none overflow-hidden rounded-lg bg-zinc-950/40 border border-zinc-800/40 hover:border-zinc-700/60 transition-all duration-300"
+      className="group relative flex flex-col gap-2 shrink-0 w-36 sm:w-44 md:w-52 overflow-hidden rounded-lg bg-zinc-950/40 border border-zinc-800/40 hover:border-zinc-700/60 transition-all duration-300"
     >
       {/* Poster container */}
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-zinc-900 rounded-t-lg">

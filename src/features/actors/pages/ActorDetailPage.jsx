@@ -172,7 +172,7 @@ export default function ActorDetailPage() {
 
       {/* Filmography Section */}
       {filmography.length > 0 && (
-        <div className="mt-12 select-none relative group/carousel">
+        <div className="mt-12 relative group/carousel">
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Known For (Filmography)
           </h2>
@@ -216,7 +216,7 @@ export default function ActorDetailPage() {
 
       {/* Photos Carousel Section */}
       {photos.length > 0 && (
-        <div className="mt-12 select-none relative group/carousel">
+        <div className="mt-12 relative group/carousel">
           <h2 className="text-base md:text-lg font-black text-zinc-100 mb-4 flex items-center gap-2 uppercase border-l-4 border-red-600 pl-2">
             Photos ({photos.length})
           </h2>

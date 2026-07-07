@@ -47,7 +47,7 @@ export default function MainLayout() {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white flex flex-col font-sans select-none antialiased">
+    <div className="min-h-screen bg-neutral-900 text-white flex flex-col font-sans antialiased">
       {/* Header / Navbar */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ease-in-out px-4 md:px-12 py-4 flex items-center justify-between ${

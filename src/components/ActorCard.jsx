@@ -17,7 +17,7 @@ export default function ActorCard({ actor }) {
   return (
     <Link
       to={`/person/${actor.id}`}
-      className="group flex flex-col gap-2 shrink-0 w-32 sm:w-36 md:w-44 select-none overflow-hidden rounded-lg bg-zinc-950/40 border border-zinc-800/40 hover:border-zinc-700/60 transition-all duration-300 pb-2 text-center"
+      className="group flex flex-col gap-2 shrink-0 w-32 sm:w-36 md:w-44 overflow-hidden rounded-lg bg-zinc-950/40 border border-zinc-800/40 hover:border-zinc-700/60 transition-all duration-300 pb-2 text-center"
     >
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-zinc-900 rounded-t-lg">
         {profileUrl ? (
